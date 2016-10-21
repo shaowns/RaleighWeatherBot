@@ -6,6 +6,7 @@
 import logging
 import tweepy
 import forecastio
+import argparse
 from keys import *
 
 
@@ -18,7 +19,7 @@ def setup_twitter_api():
     return tweepy.API(auth)
 
 
-# In[32]:
+# In[3]:
 
 def setup_logging():
     """Initiates basic logger"""
@@ -41,30 +42,45 @@ def get_tweets(w):
     return tweets
 
 
-# In[29]:
+# In[12]:
 
 def do_tweet(tweets, api, logger):
     for t in tweets:
         try:
             api.update_status(t)
-            logger.info("Tweeting: " + t, logging.INFO)
+            logger.info("Tweeting: {}".format(t))
         except Exception as e:
-            logger.error("Exception: " + str(e) + ", Tweet: " + t)   
+            logger.error("Exception: {}, Tweet: {}".format(str(e), t))
 
 
-# In[30]:
+# In[6]:
 
-def main():
-    logger = setup_logging()
-    twitter_api = setup_twitter_api()
+def get_hourly_tweets(logger):
     blob = forecastio.get_forecast(logger)
     w = forecastio.parse_forecast(blob)
     tweets = get_tweets(w)
+    return tweets
+
+
+# In[9]:
+
+def main():
+    ap = argparse.ArgumentParser(description='Raleigh Weather Bot')
+    ap.add_argument('-t', action='store_true', help='Make a tweet about current weather forecast', default=True)
+    args = ap.parse_args()
+    
+    logger = setup_logging()
+    
+    tweets = list()
+    if args.t:
+        tweets = get_hourly_tweets(logger)
+    
+    twitter_api = setup_twitter_api()
     do_tweet(tweets, twitter_api, logger)
     return
 
 
-# In[31]:
+# In[ ]:
 
 if __name__ == '__main__':
     main()
