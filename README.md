@@ -1,4 +1,4 @@
-# Raleigh Weather Bot
+# Raleigh Weather Bot ![bot mugshot](./_img/bot.jpg? 'bot mugshot')
 
 
 I am a twitter bot built using [tweepy](http://www.tweepy.org/) and [forecast.io api](https://darksky.net/dev/docs). I can only tweet about the current weather conditions in the beautiful city of Raleigh, North Carolina as of now; but someday I want to be a fully grown-up weather bot.
